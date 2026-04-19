@@ -1,0 +1,27 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    image: em-test-backend:0.1.0
+    container_name: effective-mobile-backend
+    networks:
+      - app_net
+    expose:
+      - "8080"
+
+  nginx:
+    build:
+      context: ./nginx
+    image: em-test-nginx:0.1.0
+    container_name: effective-mobile-nginx
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "80:8080"
+    networks:
+      - app_net
+
+networks:
+  app_net:
+    name: effective-mobile-app-net
